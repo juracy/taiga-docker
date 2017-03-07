@@ -1,23 +1,32 @@
-FROM python:3.4
+FROM python
 
 MAINTAINER Hylke Visser <htdvisser@gmail.com>
 
-# Install dependencies
+# For proxy, use as --build-arg in docker build command:
+# --build-arg PKG_PROXY='Acquire::http { Proxy "http://<proxy_ip>:<port>"; };'
+# --build-arg PIP_PROXY="--proxy=http://<proxy_ip>:<port>"
+ARG PKG_PROXY
+ARG PIP_PROXY
+
+# Update all mirrors
 RUN \
-  apt-get update -qq && \
-  apt-get install -y netcat && \
-  rm -rf /var/lib/apt/lists/* && \
-  pip install circus gunicorn
+    # Set a package proxy in next line
+    echo ${PKG_PROXY} > /etc/apt/apt.conf; \
+    apt-get update -qq && \
+    apt-get install -y netcat vim less curl && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install $PIP_PROXY circus gunicorn
 
 # Install taiga-back
 RUN \
-  mkdir -p /usr/local/taiga && \
+  mkdir -p /usr/local/taiga/taiga-back && \
   useradd -d /usr/local/taiga taiga && \
-  git clone https://github.com/taigaio/taiga-back.git /usr/local/taiga/taiga-back && \
+  # git clone https://github.com/taigaio/taiga-back.git /usr/local/taiga/taiga-back && \
+  wget -qO- https://github.com/taigaio/taiga-back/archive/stable.tar.gz | tar xvz --strip-components=1 -C /usr/local/taiga/taiga-back && \
   mkdir /usr/local/taiga/media /usr/local/taiga/static /usr/local/taiga/logs && \
   cd /usr/local/taiga/taiga-back && \
-  git checkout stable && \
-  pip install -r requirements.txt && \
+  # git checkout stable && \
+  pip install $PIP_PROXY -r requirements.txt && \
   touch /usr/local/taiga/taiga-back/settings/dockerenv.py && \
   touch /usr/local/taiga/circus.ini
 
