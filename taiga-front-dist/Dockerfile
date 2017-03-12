@@ -1,6 +1,7 @@
 FROM nginx
 
-MAINTAINER Hylke Visser <htdvisser@gmail.com>
+# Based in work of Hylke Visser <htdvisser@gmail.com>
+MAINTAINER Claudio Ferreira <filhocf@gmail.com>
 
 # For proxy, use as --build-arg in docker build command:
 # --build-arg PKG_PROXY='Acquire::http { Proxy "http://<proxy_ip>:<port>"; };'
@@ -38,3 +39,5 @@ RUN chmod +x /usr/local/taiga/configure /usr/local/taiga/start
 EXPOSE 80 443
 
 CMD ["/usr/local/taiga/start"]
+
+# docker run -it --rm --name taiga-front --link taiga-back -p 80:80 -p 443:443 -e DEFAULT_LANG=pt-br filhocf/taiga-front bash

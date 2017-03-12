@@ -1,6 +1,7 @@
 FROM python
 
-MAINTAINER Hylke Visser <htdvisser@gmail.com>
+# Based in work of Hylke Visser <htdvisser@gmail.com>
+MAINTAINER Claudio Ferreira <filhocf@gmail.com>
 
 # For proxy, use as --build-arg in docker build command:
 # --build-arg PKG_PROXY='Acquire::http { Proxy "http://<proxy_ip>:<port>"; };'
@@ -38,10 +39,13 @@ ADD ./configure /usr/local/taiga/configure
 ADD ./start /usr/local/taiga/start
 RUN chmod +x /usr/local/taiga/configure /usr/local/taiga/start
 
-VOLUME /usr/local/taiga/media
-VOLUME /usr/local/taiga/static
-VOLUME /usr/local/taiga/logs
+# VOLUME /usr/local/taiga/media
+# VOLUME /usr/local/taiga/static
+# VOLUME /usr/local/taiga/logs
 
 EXPOSE 8000
 
 CMD ["/usr/local/taiga/start"]
+
+# Start line
+# docker run -it --rm --name taiga-back --link pgdb:postgres -p 8000:8000 -e POSTGRES_HOST=postgres -e POSTGRES_PORT=5432 -e POSTGRES_USER=taiga -e POSTGRES_PASSWORD=changeme -e POSTGRES_DB_NAME=taiga -e EMAIL_USE_TLS=True -e EMAIL_HOST=smtp.example.com -e EMAIL_PORT=587 -e EMAIL_HOST_USER='youremail' -e EMAIL_HOST_PASSWORD='yourpassword' -e DEFAULT_FROM_EMAIL='youremail@example.com' -e TEMPLATE_DEBUG=True -e DEBUG=True filhocf/taiga-back bash

@@ -13,8 +13,13 @@ WEB_CONFIG=web-${SCHEME:-http}.conf
 sed -i "/include .*.conf;/c\  include ${WEB_CONFIG};" /etc/nginx/nginx.conf
 
 mkdir -p /etc/nginx/ssl
-[ ! -z "${SSL_CRT}" ] && echo "${SSL_CRT}" > /etc/nginx/ssl/ssl.crt
-[ ! -z "${SSL_KEY}" ] && echo "${SSL_KEY}" > /etc/nginx/ssl/ssl.key
+if [ ! -z "${SSL_CRT}" ] && [ ! -z "${SSL_KEY}" ]; then
+  echo "${SSL_CRT}" > /etc/nginx/ssl/ssl.crt
+  echo "${SSL_KEY}" > /etc/nginx/ssl/ssl.key
+else
+  cd /etc/nginx/ssl
+  openssl req -new -x509 -sha256 -days 2000 -nodes -out ssl.crt -keyout ssl.key -newkey rsa:2048 -subj "/C=BR/ST=DF/L=Brasilia/O=Company/CN=www.company.com.br"
+fi
 
 PUBLIC_REGISTER_ENABLED=${PUBLIC_REGISTER_ENABLED:-true}
 API=${API:-/api/v1/}
@@ -29,7 +34,7 @@ cat > /usr/local/taiga/taiga-front-dist/dist/conf.json <<EOL
     "eventsHeartbeatIntervalTime": 60000,
     "debug": $DEBUG,
     "debugInfo": false,
-    "defaultLanguage": "en",
+    "defaultLanguage": "${DEFAULT_LANG:-en}",
     "themes": ["taiga"],
     "defaultTheme": "taiga",
     "publicRegisterEnabled": ${PUBLIC_REGISTER_ENABLED},
