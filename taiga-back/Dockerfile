@@ -16,7 +16,7 @@ RUN \
     apt-get update -qq && \
     apt-get install -y netcat vim less curl && \
     rm -rf /var/lib/apt/lists/* && \
-    pip install $PIP_PROXY circus gunicorn
+    pip install $PIP_PROXY circus gunicorn taiga-contrib-ldap-auth
 
 # Install taiga-back
 RUN \
@@ -48,4 +48,4 @@ EXPOSE 8000
 CMD ["/usr/local/taiga/start"]
 
 # Start line
-# docker run -it --rm --name taiga-back --link pgdb:postgres -p 8000:8000 -e POSTGRES_HOST=postgres -e POSTGRES_PORT=5432 -e POSTGRES_USER=taiga -e POSTGRES_PASSWORD=changeme -e POSTGRES_DB_NAME=taiga -e EMAIL_USE_TLS=True -e EMAIL_HOST=smtp.example.com -e EMAIL_PORT=587 -e EMAIL_HOST_USER='youremail' -e EMAIL_HOST_PASSWORD='yourpassword' -e DEFAULT_FROM_EMAIL='youremail@example.com' -e TEMPLATE_DEBUG=True -e DEBUG=True filhocf/taiga-back bash
+# docker run -it --rm --name taiga-back --link pgdb:postgres -p 8000:8000 -e POSTGRES_HOST=postgres -e POSTGRES_PORT=5432 -e POSTGRES_USER=taiga -e POSTGRES_PASSWORD=changeme -e POSTGRES_DB_NAME=taiga -e EMAIL_USE_TLS=True -e EMAIL_HOST=smtp.example.com -e EMAIL_PORT=587 -e EMAIL_HOST_USER='youremail' -e EMAIL_HOST_PASSWORD='yourpassword' -e DEFAULT_FROM_EMAIL='youremail@example.com' -e TEMPLATE_DEBUG=True -e DEBUG=True -e API_DOMAIN=example.com -e LDAP_SERVER=ldap.example.com -e LDAP_PORT=636 -e LDAP_BIND_DN='uid=user,ou=Users,o=Builtin,dc=example,dc=com' -e LDAP_BIND_PASSWORD='password' -e LDAP_SEARCH_BASE='dc=example,dc=com' filhocf/taiga-back bash

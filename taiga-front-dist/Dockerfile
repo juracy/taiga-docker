@@ -40,4 +40,4 @@ EXPOSE 80 443
 
 CMD ["/usr/local/taiga/start"]
 
-# docker run -it --rm --name taiga-front --link taiga-back -p 80:80 -p 443:443 -e DEFAULT_LANG=pt-br filhocf/taiga-front bash
+# docker run -it --rm --name taiga-front --link taiga-back -p 80:80 -p 443:443 -e DEFAULT_LANG=pt-br -e LOGIN_TYPE='ldap' filhocf/taiga-front bash

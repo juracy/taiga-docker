@@ -1,24 +1,24 @@
-# htdvisser/taiga-back
+# filhocf/taiga-back
 
 [Taiga](https://taiga.io/) is a project management platform for startups and agile developers & designers who want a simple, beautiful tool that makes work truly enjoyable.
 
-This Docker image can be used for running the Taiga backend. It works together with the [htdvisser/taiga-front-dist](https://registry.hub.docker.com/u/htdvisser/taiga-front-dist/) image.
+This Docker image can be used for running the Taiga backend. It works together with the [filhocf/taiga-front-dist](https://registry.hub.docker.com/u/filhocf/taiga-front-dist/) image.
 
-[![GitHub stars](https://img.shields.io/github/stars/htdvisser/taiga-docker.svg?style=flat-square)](https://github.com/htdvisser/taiga-docker)
-[![GitHub forks](https://img.shields.io/github/forks/htdvisser/taiga-docker.svg?style=flat-square)](https://github.com/htdvisser/taiga-docker)
-[![GitHub issues](https://img.shields.io/github/issues/htdvisser/taiga-docker.svg?style=flat-square)](https://github.com/htdvisser/taiga-docker/issues)
+[![GitHub stars](https://img.shields.io/github/stars/filhocf/taiga-docker.svg?style=flat-square)](https://github.com/filhocf/taiga-docker)
+[![GitHub forks](https://img.shields.io/github/forks/filhocf/taiga-docker.svg?style=flat-square)](https://github.com/filhocf/taiga-docker)
+[![GitHub issues](https://img.shields.io/github/issues/filhocf/taiga-docker.svg?style=flat-square)](https://github.com/filhocf/taiga-docker/issues)
 
 ## Running
 
 A [postgres](https://registry.hub.docker.com/_/postgres/) container should be linked to the taiga-back container. The taiga-back container will use the ``POSTGRES_USER`` and ``POSTGRES_PASSWORD`` environment variables that are supplied to the postgres container.
 
 ```
-docker run --name taiga_back_container_name --link postgres_container_name:postgres htdvisser/taiga-back
+docker run --name taiga_back_container_name --link postgres_container_name:postgres filhocf/taiga-back
 ```
 
 ## Docker-compose
 
-For a complete taiga installation (``htdvisser/taiga-back`` and ``htdvisser/taiga-front-dist``) you can use this docker-compose configuration:
+For a complete taiga installation (``filhocf/taiga-back`` and ``filhocf/taiga-front-dist``) you can use this docker-compose configuration:
 
 ```
 data:
@@ -36,7 +36,7 @@ db:
   volumes_from:
     - data
 taigaback:
-  image: htdvisser/taiga-back:stable
+  image: filhocf/taiga-back:stable
   hostname: dev.example.com
   environment:
     SECRET_KEY: examplesecretkey
@@ -50,7 +50,7 @@ taigaback:
   volumes_from:
     - data
 taigafront:
-  image: htdvisser/taiga-front-dist:stable
+  image: filhocf/taiga-front-dist:stable
   hostname: dev.example.com
   links:
     - taigaback
@@ -85,10 +85,10 @@ URLs for static files and media files from taiga-back:
 
 Domain configuration:
 
-* ``API_SCHEME`` defaults to ``"http"``. Use ``https`` if ``htdvisser/taiga-front-dist`` is used and SSL enabled.
+* ``API_SCHEME`` defaults to ``"http"``. Use ``https`` if ``filhocf/taiga-front-dist`` is used and SSL enabled.
 * ``API_DOMAIN`` defaults to ``"$HOSTNAME"``
 * ``API_NAME`` defaults to ``"api"``
-* ``FRONT_SCHEME`` defaults to ``"http"``. Use ``https`` if ``htdvisser/taiga-front-dist`` is used and SSL enabled.
+* ``FRONT_SCHEME`` defaults to ``"http"``. Use ``https`` if ``filhocf/taiga-front-dist`` is used and SSL enabled.
 * ``FRONT_DOMAIN`` defaults to ``"$HOSTNAME"``
 * ``FRONT_NAME`` defaults to ``"front"``
 

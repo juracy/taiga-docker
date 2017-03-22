@@ -24,6 +24,11 @@ DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL:-no-reply@example.com}
 DEBUG=${DEBUG:-False}
 TEMPLATE_DEBUG=${TEMPLATE_DEBUG:-False}
 PUBLIC_REGISTER_ENABLED=${PUBLIC_REGISTER_ENABLED:-True}
+LDAP_SERVER=${LDAP_SERVER:-}
+LDAP_PORT=${LDAP_PORT:-636}
+LDAP_BIND_DN=${LDAP_BIND_DN:-}
+LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD:-}
+LDAP_SEARCH_BASE=${LDAP_SEARCH_BASE}
 
 cat > /usr/local/taiga/taiga-back/settings/dockerenv.py <<EOL
 from .common import *
@@ -70,6 +75,26 @@ DEFAULT_FROM_EMAIL = '${DEFAULT_FROM_EMAIL}'
 DEBUG = ${DEBUG}
 TEMPLATE_DEBUG = ${TEMPLATE_DEBUG}
 PUBLIC_REGISTER_ENABLED = ${PUBLIC_REGISTER_ENABLED}
+
+INSTALLED_APPS += ["taiga_contrib_ldap_auth"]
+
+LDAP_SERVER = '${LDAP_SERVER}'
+LDAP_PORT = ${LDAP_PORT}
+
+# Full DN of the service account use to connect to LDAP server and search for login user's account entry
+# If LDAP_BIND_DN is not specified, or is blank, then an anonymous bind is attempated
+LDAP_BIND_DN = '${LDAP_BIND_DN}'
+LDAP_BIND_PASSWORD = '${LDAP_BIND_PASSWORD}'
+# Starting point within LDAP structure to search for login user
+LDAP_SEARCH_BASE = '${LDAP_SEARCH_BASE}'
+# LDAP property used for searching, ie. login username needs to match value in sAMAccountName property in LDAP
+LDAP_SEARCH_PROPERTY = 'uid' # 'posixAccount'
+LDAP_SEARCH_SUFFIX = '' # '@example.com'
+
+# Names of LDAP properties on user account to get email and full name
+LDAP_EMAIL_PROPERTY = 'mail'
+LDAP_FULL_NAME_PROPERTY = 'cn'
+
 EOL
 
 cat > /usr/local/taiga/circus.ini <<EOL

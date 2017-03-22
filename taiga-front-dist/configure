@@ -42,6 +42,14 @@ cat > /usr/local/taiga/taiga-front-dist/dist/conf.json <<EOL
     "privacyPolicyUrl": null,
     "termsOfServiceUrl": null,
     "maxUploadFileSize": null,
+EOL
+
+if [ ! -z "${LOGIN_TYPE}" ]; then
+  cat >> /usr/local/taiga/taiga-front-dist/dist/conf.json <<EOL
+    "loginFormType": "ldap",
+EOL
+
+cat >> /usr/local/taiga/taiga-front-dist/dist/conf.json <<EOL
     "contribPlugins": []
 }
 
